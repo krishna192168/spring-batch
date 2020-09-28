@@ -21,6 +21,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 
+import java.time.LocalDateTime;
+
 @Configuration
 @EnableBatchProcessing
 public class SpringBatchConfig {
@@ -44,31 +46,15 @@ public class SpringBatchConfig {
     }
 
     @Bean
-    public FlatFileItemReader<COVIDReport> itemReader() {
-        FlatFileItemReader<COVIDReport> flatFileItemReader = new FlatFileItemReader<>();
-        flatFileItemReader.setResource(new FileSystemResource("src/main/resources/covid.csv"));
-        flatFileItemReader.setName("covid-reader");
-        flatFileItemReader.setLinesToSkip(1);
-        flatFileItemReader.setLineMapper(lineMapper());
-        return flatFileItemReader;
-    }
-
-    @Bean
-    public LineMapper<COVIDReport> lineMapper() {
-
-        DefaultLineMapper<COVIDReport> defaultLineMapper = new DefaultLineMapper<>();
-        DelimitedLineTokenizer lineTokenizer = new DelimitedLineTokenizer();
-
-        lineTokenizer.setDelimiter(",");
-        lineTokenizer.setStrict(false);
-        lineTokenizer.setNames(new String[]{"id", "country", "new_confirmed", "total_confirmed", "new_death", "new_recovered", "total_recovered"});
-
-        BeanWrapperFieldSetMapper<COVIDReport> fieldSetMapper = new BeanWrapperFieldSetMapper<>();
-        fieldSetMapper.setTargetType(COVIDReport.class);
-
-        defaultLineMapper.setLineTokenizer(lineTokenizer);
-        defaultLineMapper.setFieldSetMapper(fieldSetMapper);
-
-        return defaultLineMapper;
+    public ItemReader<COVIDReport> itemReader() {
+        COVIDReport covidReport = new COVIDReport();
+        covidReport.setCountry("IND");
+        covidReport.setDate(LocalDateTime.now());
+        covidReport.setNewConfirmed(11L);
+        covidReport.setNewDeath(5L);
+        covidReport.setTotalConfirmed(50L);
+        covidReport.setNewRecovered(10L);
+        ItemReader<COVIDReport> itemReaderCovid = () -> {return covidReport;};
+        return itemReaderCovid;
     }
 }
