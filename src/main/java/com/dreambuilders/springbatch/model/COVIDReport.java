@@ -29,6 +29,4 @@ public class COVIDReport {
 
     @Column(name = "total_recovered")
     private Long totalRecovered;
-
-    private LocalDateTime date;
 }

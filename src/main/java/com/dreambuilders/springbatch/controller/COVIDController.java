@@ -21,19 +21,20 @@ public class COVIDController {
     JobLauncher jobLauncher;
 
     @GetMapping("/load")
-    public BatchStatus loadColossalData() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+    public String loadColossalData() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
         Map<String, JobParameter> maps = new HashMap<>();
         maps.put("time", new JobParameter(System.currentTimeMillis()));
         JobParameters parameters = new JobParameters(maps);
         JobExecution jobExecution = jobLauncher.run(job, parameters);
 
-        System.out.println("JobExecution: " + jobExecution.getStatus());
+//        System.out.println("JobExecution: " + jobExecution.getStatus());
 
         System.out.println("Batch is Running...");
-        while (jobExecution.isRunning()) {
-            System.out.println("...");
-        }
+//        while (jobExecution.isRunning()) {
+//            System.out.println("...");
+//        }
 
-        return jobExecution.getStatus();
+//        return jobExecution.getStatus();
+        return "Spring batch colossal data process";
     }
 }
